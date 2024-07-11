@@ -1,21 +1,29 @@
 import express from "express"
 import dotenv from "dotenv"
-import dbConnect from "./db/dbConnect.js"
 // import { config } from "dotenv"
+import dbConnect from "./db/dbConnect.js"
+import userRouter from "./routers/userRouter.js"
+
 
 // Creating Express App
 const app = express()
 
 
 // middlewares
-dotenv.config()
+dotenv.config() // Load environment variables from .env file
 // config()
+app.use(express.json()) // Add this line to parse JSON bodies
+
 
 //PORT and hostname
 const PORT = process.env.PORT
 const hostName = process.env.HOST_NAME
 
+// db connection
 dbConnect()
+
+// Routers
+app.use("/api/users", userRouter)
 
 // API Demo
 app.get("/", (req, res) => {
