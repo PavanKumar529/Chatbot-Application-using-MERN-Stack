@@ -1,6 +1,7 @@
 import express from "express"
-import { signUpController, signInController } from "../controllers/userController.js"
+import { signUpController, signInController, getUser, verifyController } from "../controllers/userController.js"
 import multer from "multer"
+import { verifyToken } from "../middlewares/authMiddleware.js"
 
 // Multer configuration for file upload
 //Image Storage Engine
@@ -22,5 +23,11 @@ userRouter.post("/sign-up", upload.single('image'), signUpController)
 
 // Login || POST
 userRouter.post("/sign-in", signInController)
+
+// token || GET
+userRouter.get("/token", verifyToken, verifyController)
+
+// Login || POST
+userRouter.get("/get-user",verifyToken, getUser)
 
 export default userRouter

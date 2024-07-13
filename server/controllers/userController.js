@@ -83,7 +83,7 @@ const signInController = async(req, res, next) => {
                 // Generate JWT token
                 const token = jwt.sign({ userId: existingUser._id }, process.env.JWT_SECRET_KEY, { expiresIn: "1h"})
                 // Set cookie with the token
-                res.cookie("token", token, {maxAge: 1000 * 60 * 60 * 24 * 7, httpOnly: true })
+                res.cookie("auth_token", token, {maxAge: 1000 * 60 * 60 * 24 * 7, httpOnly: true })
                 return res.status(200).send({ message: "User successfully logged in", success: true})
             }
             else {
@@ -100,4 +100,24 @@ const signInController = async(req, res, next) => {
     }
 }
 
-export { signUpController, signInController }
+let verifyController = async (req, res) => {
+    res.json({ ok: "done" });
+  };
+  
+
+  const getUser = async (req, res) => {
+    try {
+        const { userId } = req
+        const userDetails = await userModel.findById(userId).select("-_id -password -__v")
+        if (!userDetails) {
+            return res.status(403).send({ error: "User is not available" })
+        }
+        else return res.status(200).send(userDetails)
+    }
+    catch (err) {
+        res.status(500).send({ error: "something went wrong", errorMsg: err.message })
+    }
+}
+
+
+export { signUpController, signInController, verifyController, getUser }

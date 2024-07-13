@@ -3,6 +3,7 @@ import dotenv from "dotenv"
 // import { config } from "dotenv"
 import dbConnect from "./db/dbConnect.js"
 import userRouter from "./routers/userRouter.js"
+import cookieParser from "cookie-parser"; 
 
 
 // Creating Express App
@@ -13,6 +14,7 @@ const app = express()
 dotenv.config() // Load environment variables from .env file
 // config()
 app.use(express.json()) // Add this line to parse JSON bodies
+app.use(cookieParser()); // Parse cookies
 
 
 //PORT and hostname
